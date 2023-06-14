@@ -23,9 +23,9 @@
 #ifndef CRYPTOPP_CONFIG_ASM_H
 #define CRYPTOPP_CONFIG_ASM_H
 
-#include "config_os.h"
-#include "config_cpu.h"
-#include "config_ver.h"
+#include "cryptopp/config_os.h"
+#include "cryptopp/config_cpu.h"
+#include "cryptopp/config_ver.h"
 
 // Define this to disable ASM, intrinsics and built-ins. The library will be
 // compiled using C++ only. The library code will not include SSE2 (and
@@ -130,7 +130,7 @@
 #endif
 
 // Couple to CRYPTOPP_DISABLE_AESNI, but use CRYPTOPP_CLMUL_AVAILABLE so we can selectively
-//  disable for misbehaving platforms and compilers, like Solaris or some Clang.
+//  disable for misbehaving platofrms and compilers, like Solaris or some Clang.
 #if defined(CRYPTOPP_DISABLE_AESNI)
 	#define CRYPTOPP_DISABLE_CLMUL 1
 #endif
@@ -311,12 +311,6 @@
 # endif  // Platforms
 #endif
 
-// Buggy Microsoft compiler, https://github.com/weidai11/cryptopp/issues/1096
-#if defined(_MSC_VER)
-# undef CRYPTOPP_ARM_SHA1_AVAILABLE
-# undef CRYPTOPP_ARM_SHA2_AVAILABLE
-#endif
-
 // ARMv8 and SHA-512, SHA-3. -march=armv8.2-a+crypto or above must be present
 // Requires GCC 8.0, Clang 11.0, Apple Clang 12.0 or Visual Studio 20??
 #if !defined(CRYPTOPP_ARM_SHA3_AVAILABLE) && !defined(CRYPTOPP_DISABLE_ARM_SHA)
@@ -371,14 +365,12 @@
 // than C/C++. Define this to use the Cryptogams AES and SHA implementations
 // on GNU Linux systems. When defined, Crypto++ will use aes_armv4.S,
 // sha1_armv4.S and sha256_armv4.S. https://www.cryptopp.com/wiki/Cryptogams.
-#if !defined(CRYPTOPP_DISABLE_ARM_NEON)
-# if defined(__arm__) && defined(__linux__)
-#  if defined(__GNUC__) || defined(__clang__)
-#   define CRYPTOGAMS_ARM_AES      1
-#   define CRYPTOGAMS_ARM_SHA1     1
-#   define CRYPTOGAMS_ARM_SHA256   1
-#   define CRYPTOGAMS_ARM_SHA512   1
-#  endif
+#if defined(__arm__) && defined(__linux__)
+# if defined(__GNUC__) || defined(__clang__)
+#  define CRYPTOGAMS_ARM_AES      1
+#  define CRYPTOGAMS_ARM_SHA1     1
+#  define CRYPTOGAMS_ARM_SHA256   1
+#  define CRYPTOGAMS_ARM_SHA512   1
 # endif
 #endif
 

@@ -1,7 +1,7 @@
 // oids.h - originally written and placed in the public domain by Wei Dai
 
 /// \file oids.h
-/// \brief ASN.1 object identifiers for algorithms and schemes
+/// \brief ASN.1 object identifiers for algorthms and schemes
 /// \details Most OIDs can be found at http://www.oid-info.com/. The Chinese OIDs
 ///   are assigned in GM/T 0006-2012, Cryptographic Application Identifier Criterion
 ///   Specification. A reproduction can be found at http://gmssl.org/docs/oid.html.
@@ -12,7 +12,7 @@
 #ifndef CRYPTOPP_OIDS_H
 #define CRYPTOPP_OIDS_H
 
-#include "asn.h"
+#include "cryptopp/asn.h"
 
 NAMESPACE_BEGIN(CryptoPP)
 

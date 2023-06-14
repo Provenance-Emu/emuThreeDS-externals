@@ -2,24 +2,24 @@
 //                Routines in this source file are only tested in Debug builds.
 //                Source files split in July 2018 to expedite compiles.
 
-#include "pch.h"
+#include "cryptopp/pch.h"
 
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
-#include "cryptlib.h"
-#include "cpu.h"
-#include "validate.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/cpu.h"
+#include "cryptopp/validate.h"
 
-#include "asn.h"
-#include "gf2n.h"
-#include "default.h"
-#include "integer.h"
-#include "polynomi.h"
-#include "channels.h"
+#include "cryptopp/asn.h"
+#include "cryptopp/gf2n.h"
+#include "cryptopp/default.h"
+#include "cryptopp/integer.h"
+#include "cryptopp/polynomi.h"
+#include "cryptopp/channels.h"
 
-#include "ida.h"
-#include "gzip.h"
-#include "zlib.h"
+#include "cryptopp/ida.h"
+#include "cryptopp/gzip.h"
+#include "cryptopp/zlib.h"
 
 #include <iostream>
 #include <iomanip>
@@ -1575,10 +1575,7 @@ bool TestASN1Functions()
 
     {
         const std::string message = "Now is the time for all good men to come to the aide of their country";
-        const byte asnStringTypes[] = {
-            UTF8_STRING, PRINTABLE_STRING, T61_STRING, VIDEOTEXT_STRING,IA5_STRING, VISIBLE_STRING
-        };
-
+        const int asnStringTypes[] = {UTF8_STRING, PRINTABLE_STRING, T61_STRING, VIDEOTEXT_STRING, IA5_STRING, VISIBLE_STRING};
         unsigned int failed = 0;
         size_t len = 0, rlen = 0, i = 0;
 
@@ -1609,7 +1606,7 @@ bool TestASN1Functions()
     {
         const byte date[] = "Sun, 21 Mar 2021 01:00:00 +0000";
         SecByteBlock message; message.Assign(date, sizeof(date)-1);
-        const byte asnDateTypes[] = {UTC_TIME, GENERALIZED_TIME};
+        const int asnDateTypes[] = {UTC_TIME, GENERALIZED_TIME};
         unsigned int failed = 0;
         size_t i = 0;
 

@@ -20,7 +20,7 @@
 //  them. Initialization priorities are init_priority() on Linux and init_seg()
 //  on Windows. OS X and several other platforms lack them. Initialization
 //  priorities are platform specific but they are also the most trouble free
-//  with deterministic destruction.
+//  with determisitic destruction.
 // Second, if C++11 dynamic initialization is available, then we use it. After
 //  the std::call_once fiasco we moved to dynamic initialization to avoid
 //  unknown troubles platforms that are tested less frequently. In addition
@@ -39,7 +39,7 @@
 //  resource acquisition in reverse. For resources provided through the
 //  Singletons, there is no way to express the dependency order to safely
 //  destroy resources. (That's one of the problems C++11 dynamic
-//  initialization with concurrent execution is supposed to solve).
+//  intitialization with concurrent execution is supposed to solve).
 // The final problem with Singletons is resource/memory exhaustion in languages
 //  like Java and .Net. Java and .Net load and unload a native DLL hundreds or
 //  thousands of times during the life of a program. Each load produces a
@@ -52,26 +52,26 @@
 //  were advertising BMI/BMI2 support but caused SIGILL's at runtime. Also see
 //  https://github.com/weidai11/cryptopp/issues/850.
 
-#include "pch.h"
-#include "config.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
 
 #ifndef CRYPTOPP_IMPORTS
 
-#include "integer.h"
-#include "secblock.h"
-#include "modarith.h"
-#include "nbtheory.h"
-#include "smartptr.h"
-#include "algparam.h"
-#include "filters.h"
-#include "stdcpp.h"
-#include "asn.h"
-#include "oids.h"
-#include "words.h"
-#include "pubkey.h"		// for P1363_KDF2
-#include "sha.h"
-#include "cpu.h"
-#include "misc.h"
+#include "cryptopp/integer.h"
+#include "cryptopp/secblock.h"
+#include "cryptopp/modarith.h"
+#include "cryptopp/nbtheory.h"
+#include "cryptopp/smartptr.h"
+#include "cryptopp/algparam.h"
+#include "cryptopp/filters.h"
+#include "cryptopp/stdcpp.h"
+#include "cryptopp/asn.h"
+#include "cryptopp/oids.h"
+#include "cryptopp/words.h"
+#include "cryptopp/pubkey.h"		// for P1363_KDF2
+#include "cryptopp/sha.h"
+#include "cryptopp/cpu.h"
+#include "cryptopp/misc.h"
 
 #include <iostream>
 
@@ -3799,36 +3799,24 @@ Integer& Integer::operator--()
 //  worry about negative zero. Also see http://stackoverflow.com/q/11644362.
 Integer Integer::And(const Integer& t) const
 {
-	// Grow due to https://github.com/weidai11/cryptopp/issues/1072
-	// The temporary Integer 'result' may have fewer blocks than
-	// 'this' or 't', if leading 0-blocks are trimmed in copy ctor.
-
 	if (this == &t)
 	{
 		return AbsoluteValue();
 	}
 	else if (reg.size() >= t.reg.size())
 	{
-		IntegerSecBlock temp(t.reg.size());
-		// AndWords(temp, reg, t.reg, t.reg.size());
-		for (size_t i=0; i<t.reg.size(); ++i)
-			temp[i] = reg[i] & t.reg[i];
+		Integer result(t);
+		AndWords(result.reg, reg, t.reg.size());
 
-		Integer result;
-		std::swap(result.reg, temp);
-
+		result.sign = POSITIVE;
 		return result;
 	}
 	else // reg.size() < t.reg.size()
 	{
-		IntegerSecBlock temp(reg.size());
-		// AndWords(temp, reg, t.reg, reg.size());
-		for (size_t i=0; i<reg.size(); ++i)
-			temp[i] = reg[i] & t.reg[i];
+		Integer result(*this);
+		AndWords(result.reg, t.reg, reg.size());
 
-		Integer result;
-		std::swap(result.reg, temp);
-
+		result.sign = POSITIVE;
 		return result;
 	}
 }
@@ -3837,36 +3825,24 @@ Integer Integer::And(const Integer& t) const
 //  worry about negative zero. Also see http://stackoverflow.com/q/11644362.
 Integer Integer::Or(const Integer& t) const
 {
-	// Grow due to https://github.com/weidai11/cryptopp/issues/1072
-	// The temporary Integer 'result' may have fewer blocks than
-	// 'this' or 't', if leading 0-blocks are trimmed in copy ctor.
-
 	if (this == &t)
 	{
 		return AbsoluteValue();
 	}
 	else if (reg.size() >= t.reg.size())
 	{
-		IntegerSecBlock temp(reg, reg.size());
-		// OrWords(temp, t.reg, t.reg.size());
-		for (size_t i=0; i<t.reg.size(); ++i)
-			temp[i] |= t.reg[i];
+		Integer result(*this);
+		OrWords(result.reg, t.reg, t.reg.size());
 
-		Integer result;
-		std::swap(result.reg, temp);
-
+		result.sign = POSITIVE;
 		return result;
 	}
 	else // reg.size() < t.reg.size()
 	{
-		IntegerSecBlock temp(t.reg, t.reg.size());
-		// OrWords(temp, reg, reg.size());
-		for (size_t i=0; i<reg.size(); ++i)
-			temp[i] |= reg[i];
+		Integer result(t);
+		OrWords(result.reg, reg, reg.size());
 
-		Integer result;
-		std::swap(result.reg, temp);
-
+		result.sign = POSITIVE;
 		return result;
 	}
 }
@@ -3875,36 +3851,24 @@ Integer Integer::Or(const Integer& t) const
 //  worry about negative zero. Also see http://stackoverflow.com/q/11644362.
 Integer Integer::Xor(const Integer& t) const
 {
-	// Grow due to https://github.com/weidai11/cryptopp/issues/1072
-	// The temporary Integer 'result' may have fewer blocks than
-	// 'this' or 't', if leading 0-blocks are trimmed in copy ctor.
-
 	if (this == &t)
 	{
 		return Integer::Zero();
 	}
 	else if (reg.size() >= t.reg.size())
 	{
-		IntegerSecBlock temp(reg, reg.size());
-		// OrWords(temp, t.reg, t.reg.size());
-		for (size_t i=0; i<t.reg.size(); ++i)
-			temp[i] ^= t.reg[i];
+		Integer result(*this);
+		XorWords(result.reg, t.reg, t.reg.size());
 
-		Integer result;
-		std::swap(result.reg, temp);
-
+		result.sign = POSITIVE;
 		return result;
 	}
 	else // reg.size() < t.reg.size()
 	{
-		IntegerSecBlock temp(t.reg, t.reg.size());
-		// OrWords(temp, reg, reg.size());
-		for (size_t i=0; i<reg.size(); ++i)
-			temp[i] ^= reg[i];
+		Integer result(t);
+		XorWords(result.reg, reg, reg.size());
 
-		Integer result;
-		std::swap(result.reg, temp);
-
+		result.sign = POSITIVE;
 		return result;
 	}
 }
@@ -4762,7 +4726,7 @@ const Integer& MontgomeryRepresentation::MultiplicativeInverse(const Integer &a)
 }
 
 // Specialization declared in misc.h to allow us to print integers
-//  with additional control options, like arbitrary bases and uppercase.
+//  with additional control options, like arbirary bases and uppercase.
 template <> CRYPTOPP_DLL
 std::string IntToString<Integer>(Integer value, unsigned int base)
 {

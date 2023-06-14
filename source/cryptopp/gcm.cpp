@@ -6,8 +6,8 @@
 
 // use "cl /EP /P /DCRYPTOPP_GENERATE_X64_MASM gcm.cpp" to generate MASM code
 
-#include "pch.h"
-#include "config.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
 
 #ifndef CRYPTOPP_IMPORTS
 #ifndef CRYPTOPP_GENERATE_X64_MASM
@@ -17,8 +17,8 @@
 # pragma optimize("", off)
 #endif
 
-#include "gcm.h"
-#include "cpu.h"
+#include "cryptopp/gcm.h"
+#include "cryptopp/cpu.h"
 
 #if defined(CRYPTOPP_DISABLE_GCM_ASM)
 # undef CRYPTOPP_X86_ASM_AVAILABLE
@@ -559,7 +559,6 @@ size_t GCM_Base::AuthenticateBlocks(const byte *data, size_t len)
 #endif
 
 #if CRYPTOPP_SSE2_ASM_AVAILABLE
-
     case 1:        // SSE2 and 2K tables
         {
         #ifdef __GNUC__
@@ -726,8 +725,10 @@ size_t GCM_Base::AuthenticateBlocks(const byte *data, size_t len)
                 ATT_PREFIX
                     :
                     : "c" (data), "d" (len/16), "S" (hashBuffer), "D" (s_reductionTable)
-                    : "memory", "cc", "%eax", "%ebx", PERCENT_REG(AS_REG_7), "%xmm0",
-                      "%xmm1", "%xmm2", "%xmm3", "%xmm4", "%xmm5"
+                    : "memory", "cc", "%eax"
+            #if CRYPTOPP_BOOL_X64
+                    , "%ebx", "%r11"
+            #endif
                 );
         #elif defined(CRYPTOPP_GENERATE_X64_MASM)
             pop rbx
@@ -803,7 +804,7 @@ size_t GCM_Base::AuthenticateBlocks(const byte *data, size_t len)
                 ATT_PREFIX
                     :
                     : "c" (data), "d" (len/16), "S" (hashBuffer)
-                    : "memory", "cc", "%edi", "%eax", "%xmm0", "%xmm1"
+                    : "memory", "cc", "%edi", "%eax"
                 );
         #elif defined(CRYPTOPP_GENERATE_X64_MASM)
             pop rdi

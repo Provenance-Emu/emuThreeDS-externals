@@ -1,13 +1,13 @@
 // queue.cpp - originally written and placed in the public domain by Wei Dai
 
-#include "pch.h"
+#include "cryptopp/pch.h"
 
 #ifndef CRYPTOPP_IMPORTS
 
-#include "queue.h"
-#include "filters.h"
-#include "misc.h"
-#include "trap.h"
+#include "cryptopp/queue.h"
+#include "cryptopp/filters.h"
+#include "cryptopp/misc.h"
+#include "cryptopp/trap.h"
 
 NAMESPACE_BEGIN(CryptoPP)
 
@@ -255,7 +255,7 @@ size_t ByteQueue::Put2(const byte *inString, size_t length, int messageEnd, bool
 
 void ByteQueue::CleanupUsedNodes()
 {
-	// Test for m_head due to Enterprise Analysis finding
+	// Test for m_head due to Enterprise Anlysis finding
 	while (m_head && m_head != m_tail && m_head->UsedUp())
 	{
 		ByteQueueNode *temp=m_head;
@@ -263,7 +263,7 @@ void ByteQueue::CleanupUsedNodes()
 		delete temp;
 	}
 
-	// Test for m_head due to Enterprise Analysis finding
+	// Test for m_head due to Enterprise Anlysis finding
 	if (m_head && m_head->CurrentSize() == 0)
 		m_head->Clear();
 }

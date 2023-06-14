@@ -14,11 +14,11 @@
 //    * Intel Broadwell, 2.3 GHz: AVX2 at 3828 MB/s; 0.58 cpb.
 //    * AMD Bulldozer,   3.3 GHz: AVX2 at 1680 MB/s; 1.47 cpb.
 
-#include "pch.h"
-#include "config.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
 
-#include "chacha.h"
-#include "misc.h"
+#include "cryptopp/chacha.h"
+#include "cryptopp/misc.h"
 
 #if defined(CRYPTOPP_AVX2_AVAILABLE)
 # include <xmmintrin.h>
@@ -36,12 +36,13 @@ extern const char CHACHA_AVX_FNAME[] = __FILE__;
 # define MAYBE_CONST const
 #endif
 
-// VS2017 and global optimization bug. Also see
+// VS2017 and global optimization bug. TODO, figure out when
+// we can re-enable full optimizations for VS2017. Also see
 // https://github.com/weidai11/cryptopp/issues/649 and
 // https://github.com/weidai11/cryptopp/issues/735. The
 // 649 issue affects AES but it is the same here. The 735
 // issue is ChaCha AVX2 cut-in where it surfaced again.
-#if (_MSC_VER >= 1910) && (_MSC_VER < 1916)
+#if (_MSC_VER >= 1910)
 # ifndef CRYPTOPP_DEBUG
 #  pragma optimize("", off)
 #  pragma optimize("ts", on)

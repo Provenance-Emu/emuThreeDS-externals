@@ -18,11 +18,11 @@
 #ifndef CRYPTOPP_RANDPOOL_H
 #define CRYPTOPP_RANDPOOL_H
 
-#include "cryptlib.h"
-#include "filters.h"
-#include "secblock.h"
-#include "smartptr.h"
-#include "aes.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/filters.h"
+#include "cryptopp/secblock.h"
+#include "cryptopp/smartptr.h"
+#include "cryptopp/aes.h"
 
 NAMESPACE_BEGIN(CryptoPP)
 
@@ -87,7 +87,7 @@ public:
 	byte GenerateByte();
 	void GenerateBlock(byte *output, size_t size);
 
-	// GenerateWord32 is overridden and provides Crypto++ 5.4 behavior.
+	// GenerateWord32 is overriden and provides Crypto++ 5.4 behavior.
 	// Taken from RandomNumberSource::GenerateWord32 in cryptlib.cpp.
 	word32 GenerateWord32 (word32 min=0, word32 max=0xffffffffUL);
 

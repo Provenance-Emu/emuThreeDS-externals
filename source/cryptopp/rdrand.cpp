@@ -1,23 +1,23 @@
 // rdrand.cpp - written and placed in public domain by Jeffrey Walton and Uri Blumenthal.
 
-#include "pch.h"
-#include "config.h"
-#include "cryptlib.h"
-#include "secblock.h"
-#include "rdrand.h"
-#include "cpu.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/secblock.h"
+#include "cryptopp/rdrand.h"
+#include "cryptopp/cpu.h"
 
 // This file (and friends) provides both RDRAND and RDSEED. They were added
 //   at Crypto++ 5.6.3. At compile time, it uses CRYPTOPP_BOOL_{X86|X32|X64}
 //   to select an implementation or throws "NotImplemented". Users of the
 //   classes should call HasRDRAND() or HasRDSEED() to determine if a
 //   generator is available at runtime.
-// The original classes accepted a retry count. Retries were superfluous for
+// The original classes accepted a retry count. Retries were superflous for
 //   RDRAND, and RDSEED encountered a failure about 1 in 256 bytes depending
 //   on the processor. Retries were removed at Crypto++ 6.0 because
 //   GenerateBlock unconditionally retries and always fulfills the request.
 // Intel recommends using a retry count in case RDRAND or RDSEED circuit
-//   is bad. This implementation does not follow the advice and requires
+//   is bad. This implemenation does not follow the advice and requires
 //   good silicon. If the circuit or processor is bad then the user has
 //   bigger problems than generating random numbers.
 

@@ -2,17 +2,17 @@
 //                Routines in this source file are only tested in Debug builds.
 //                Source files split in July 2018 to expedite compiles.
 
-#include "pch.h"
+#include "cryptopp/pch.h"
 
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
-#include "cryptlib.h"
-#include "cpu.h"
-#include "validate.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/cpu.h"
+#include "cryptopp/validate.h"
 
-#include "algebra.h"
-#include "integer.h"
-#include "nbtheory.h"
+#include "cryptopp/algebra.h"
+#include "cryptopp/integer.h"
+#include "cryptopp/nbtheory.h"
 
 #include <iostream>
 #include <iomanip>
@@ -600,12 +600,6 @@ bool TestIntegerBitops()
         opa &= ((m & -n) == a);
         opa &= ((-m & -n) == a);
 
-        // And reversed
-        opa &= ((n & m) == a);
-        opa &= ((-n & m) == a);
-        opa &= ((n & -m) == a);
-        opa &= ((-n & -m) == a);
-
         Integer t(m); t &= n;
         opa &= (t == a);
         t = n; t &= m;
@@ -632,12 +626,6 @@ bool TestIntegerBitops()
         opo &= ((m | -n) == o);
         opo &= ((-m | -n) == o);
 
-        // And reversed
-        opo &= ((n | m) == o);
-        opo &= ((-n | m) == o);
-        opo &= ((n | -m) == o);
-        opo &= ((-n | -m) == o);
-
         Integer t(m); t |= n;
         opo &= (t == o);
         t = n; t |= m;
@@ -663,12 +651,6 @@ bool TestIntegerBitops()
         opx &= ((-m ^ n) == x);
         opx &= ((m ^ -n) == x);
         opx &= ((-m ^ -n) == x);
-
-        // And reversed
-        opx &= ((n ^ m) == x);
-        opx &= ((-n ^ m) == x);
-        opx &= ((n ^ -m) == x);
-        opx &= ((-n ^ -m) == x);
 
         Integer t(m); t ^= n;
         opx &= (t == x);

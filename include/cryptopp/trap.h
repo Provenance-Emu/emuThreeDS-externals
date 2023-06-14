@@ -18,7 +18,7 @@
 #ifndef CRYPTOPP_TRAP_H
 #define CRYPTOPP_TRAP_H
 
-#include "config.h"
+#include "cryptopp/config.h"
 
 #if defined(CRYPTOPP_DEBUG)
 #  include <iostream>

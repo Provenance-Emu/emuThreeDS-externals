@@ -6,30 +6,30 @@
 #define CRYPTOPP_DEFAULT_NO_DLL
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
-#include "dll.h"
-#include "cryptlib.h"
-#include "aes.h"
-#include "filters.h"
-#include "md5.h"
-#include "ripemd.h"
-#include "rng.h"
-#include "gzip.h"
-#include "default.h"
-#include "randpool.h"
-#include "ida.h"
-#include "base64.h"
-#include "factory.h"
-#include "whrlpool.h"
-#include "tiger.h"
-#include "smartptr.h"
-#include "pkcspad.h"
-#include "stdcpp.h"
-#include "osrng.h"
-#include "ossig.h"
-#include "trap.h"
+#include "cryptopp/dll.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/aes.h"
+#include "cryptopp/filters.h"
+#include "cryptopp/md5.h"
+#include "cryptopp/ripemd.h"
+#include "cryptopp/rng.h"
+#include "cryptopp/gzip.h"
+#include "cryptopp/default.h"
+#include "cryptopp/randpool.h"
+#include "cryptopp/ida.h"
+#include "cryptopp/base64.h"
+#include "cryptopp/factory.h"
+#include "cryptopp/whrlpool.h"
+#include "cryptopp/tiger.h"
+#include "cryptopp/smartptr.h"
+#include "cryptopp/pkcspad.h"
+#include "cryptopp/stdcpp.h"
+#include "cryptopp/osrng.h"
+#include "cryptopp/ossig.h"
+#include "cryptopp/trap.h"
 
-#include "validate.h"
-#include "bench.h"
+#include "cryptopp/validate.h"
+#include "cryptopp/bench.h"
 
 #include <iostream>
 #include <sstream>
@@ -398,7 +398,7 @@ int scoped_main(int argc, char *argv[])
 		else if (command == "ir")
 			InformationRecoverFile(argc-3, argv[2], argv+3);
 		else if (command == "v" || command == "vv")
-			return !Validate(argc>2 ? StringToValue<int, true>(argv[2]) : 0, command == "vv" /*thorough*/);
+			return !Validate(argc>2 ? StringToValue<int, true>(argv[2]) : 0, argv[1][1] == 'v');
 		else if (command.substr(0,1) == "b") // "b", "b1", "b2", ...
 			BenchmarkWithCommand(argc, argv);
 		else if (command == "z")
@@ -426,7 +426,7 @@ int scoped_main(int argc, char *argv[])
 		else if (command == "h")
 		{
 			FileSource usage(DataDir("TestData/usage.dat").c_str(), true, new FileSink(std::cout));
-			return argv[1][0] == 'h' ? 0 : 1;
+			return 1;
 		}
 		else if (command == "V")
 		{
@@ -1085,13 +1085,4 @@ bool Validate(int alg, bool thorough)
 NAMESPACE_END  // Test
 NAMESPACE_END  // CryptoPP
 
-// Microsoft puts a byte in global namespace. Combined with
-// a 'using namespace CryptoPP', it causes compile failures.
-// Also see http://github.com/weidai11/cryptopp/issues/442
-// and http://github.com/weidai11/cryptopp/issues/447.
-/*
-int CRYPTOPP_API main(int argc, char *argv[])
-{
-	return CryptoPP::Test::scoped_main(argc, argv);
-}
-*/
+// MARK: Removed main() x scoped_main()

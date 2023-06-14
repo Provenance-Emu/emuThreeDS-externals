@@ -5,12 +5,12 @@
 //              The reference materials and source files are available at
 //              The eSTREAM Project, http://www.ecrypt.eu.org/stream/e2-rabbit.html.
 
-#include "pch.h"
-#include "config.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
 
-#include "rabbit.h"
-#include "secblock.h"
-#include "misc.h"
+#include "cryptopp/rabbit.h"
+#include "cryptopp/secblock.h"
+#include "cryptopp/misc.h"
 
 ANONYMOUS_NAMESPACE_BEGIN
 

@@ -2,7 +2,7 @@
 //              Based on Andy Polyakov's Base-2^26 scalar multiplication implementation.
 //              For more information, see https://www.openssl.org/~appro/cryptogams/.
 
-// The library added Bernstein's Poly1305 classes at Crypto++ 6.0. The IETF
+// The library added Bernstein's Poly1305 classses at Crypto++ 6.0. The IETF
 // uses a slightly different implementation than Bernstein, and the IETF
 // classes were added at Crypto++ 8.1. We wanted to maintain ABI compatibility
 // at the 8.1 release so the original Poly1305 classes were not disturbed.
@@ -25,11 +25,11 @@
 #ifndef CRYPTOPP_POLY1305_H
 #define CRYPTOPP_POLY1305_H
 
-#include "cryptlib.h"
-#include "seckey.h"
-#include "secblock.h"
-#include "argnames.h"
-#include "algparam.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/seckey.h"
+#include "cryptopp/secblock.h"
+#include "cryptopp/argnames.h"
+#include "cryptopp/algparam.h"
 
 NAMESPACE_BEGIN(CryptoPP)
 

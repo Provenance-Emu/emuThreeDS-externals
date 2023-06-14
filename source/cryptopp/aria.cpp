@@ -1,11 +1,11 @@
 // aria.cpp - written and placed in the public domain by Jeffrey Walton
 
-#include "pch.h"
-#include "config.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
 
-#include "aria.h"
-#include "misc.h"
-#include "cpu.h"
+#include "cryptopp/aria.h"
+#include "cryptopp/misc.h"
+#include "cryptopp/cpu.h"
 
 #if CRYPTOPP_SSE2_INTRIN_AVAILABLE
 # define CRYPTOPP_ENABLE_ARIA_SSE2_INTRINSICS 1

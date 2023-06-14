@@ -4,19 +4,19 @@
 // of reusing random numbers after state rollback (which may occur
 // when running in a virtual machine like VMware).
 
-#include "pch.h"
+#include "cryptopp/pch.h"
 
 #ifndef CRYPTOPP_IMPORTS
 
-#include "randpool.h"
-#include "aes.h"
-#include "sha.h"
-#include "hrtimer.h"
-#include "trap.h"
+#include "cryptopp/randpool.h"
+#include "cryptopp/aes.h"
+#include "cryptopp/sha.h"
+#include "cryptopp/hrtimer.h"
+#include "cryptopp/trap.h"
 
 // OldRandomPool
-#include "mdc.h"
-#include "modes.h"
+#include "cryptopp/mdc.h"
+#include "cryptopp/modes.h"
 
 #include <time.h>
 
@@ -105,7 +105,7 @@ void OldRandomPool::IncorporateEntropy(const byte *input, size_t length)
 	}
 }
 
-// GenerateWord32 is overridden and provides Crypto++ 5.4 behavior.
+// GenerateWord32 is overriden and provides Crypto++ 5.4 behavior.
 // Taken from RandomNumberGenerator::GenerateWord32 in cryptlib.cpp.
 word32 OldRandomPool::GenerateWord32 (word32 min, word32 max)
 {

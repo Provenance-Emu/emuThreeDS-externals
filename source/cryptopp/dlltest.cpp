@@ -2,10 +2,10 @@
 # define CRYPTOPP_DEFAULT_NO_DLL
 #endif
 
-#include "dll.h"
-#include "cryptlib.h"
-#include "filters.h"
-#include "pkcspad.h"
+#include "cryptopp/dll.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/filters.h"
+#include "cryptopp/pkcspad.h"
 
 #if CRYPTOPP_MSC_VERSION
 # pragma warning(disable: 4505 4355)
@@ -200,15 +200,3 @@ void __cdecl operator delete (void * p)
 }
 
 #endif
-
-/*
-#ifdef CRYPTOPP_DLL_ONLY
-
-int __cdecl main()
-{
-	FIPS140_SampleApplication();
-	return 0;
-}
-
-#endif
-*/

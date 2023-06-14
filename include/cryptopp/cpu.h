@@ -30,7 +30,7 @@
 #ifndef CRYPTOPP_CPU_H
 #define CRYPTOPP_CPU_H
 
-#include "config.h"
+#include "cryptopp/config.h"
 
 // Issue 340
 #if CRYPTOPP_GCC_DIAGNOSTIC_AVAILABLE
@@ -59,10 +59,6 @@
 	#define ATT_PREFIX
 	#define ATT_NOPREFIX
 #endif
-
-// Thanks to v1ne at https://github.com/weidai11/cryptopp/pull/1133
-#define PERCENT_PASTE(x) "%" #x
-#define PERCENT_REG(x) PERCENT_PASTE(x)
 
 #ifdef CRYPTOPP_GENERATE_X64_MASM
 
@@ -675,7 +671,7 @@ inline bool HasSM4()
 
 // Hide from Doxygen
 #ifndef CRYPTOPP_DOXYGEN_PROCESSING
-extern bool g_PowerPcDetectionDone;
+extern bool g_PowerpcDetectionDone;
 extern bool g_hasAltivec;
 extern bool g_hasPower7;
 extern bool g_hasPower8;
@@ -686,7 +682,7 @@ extern bool g_hasSHA256;
 extern bool g_hasSHA512;
 extern bool g_hasDARN;
 extern word32 g_cacheLineSize;
-void CRYPTOPP_API DetectPowerPcFeatures();
+void CRYPTOPP_API DetectPowerpcFeatures();
 #endif  // CRYPTOPP_DOXYGEN_PROCESSING
 
 /// \name POWERPC CPU FEATURES
@@ -702,8 +698,8 @@ void CRYPTOPP_API DetectPowerPcFeatures();
 inline bool HasAltivec()
 {
 #if CRYPTOPP_ALTIVEC_AVAILABLE
-	if (!g_PowerPcDetectionDone)
-		DetectPowerPcFeatures();
+	if (!g_PowerpcDetectionDone)
+		DetectPowerpcFeatures();
 	return g_hasAltivec;
 #else
 	return false;
@@ -719,8 +715,8 @@ inline bool HasAltivec()
 inline bool HasPower7()
 {
 #if CRYPTOPP_POWER7_AVAILABLE
-	if (!g_PowerPcDetectionDone)
-		DetectPowerPcFeatures();
+	if (!g_PowerpcDetectionDone)
+		DetectPowerpcFeatures();
 	return g_hasPower7;
 #else
 	return false;
@@ -736,8 +732,8 @@ inline bool HasPower7()
 inline bool HasPower8()
 {
 #if CRYPTOPP_POWER8_AVAILABLE
-	if (!g_PowerPcDetectionDone)
-		DetectPowerPcFeatures();
+	if (!g_PowerpcDetectionDone)
+		DetectPowerpcFeatures();
 	return g_hasPower8;
 #else
 	return false;
@@ -753,8 +749,8 @@ inline bool HasPower8()
 inline bool HasPower9()
 {
 #if CRYPTOPP_POWER9_AVAILABLE
-	if (!g_PowerPcDetectionDone)
-		DetectPowerPcFeatures();
+	if (!g_PowerpcDetectionDone)
+		DetectPowerpcFeatures();
 	return g_hasPower9;
 #else
 	return false;
@@ -771,8 +767,8 @@ inline bool HasPower9()
 inline bool HasAES()
 {
 #if CRYPTOPP_POWER8_AES_AVAILABLE
-	if (!g_PowerPcDetectionDone)
-		DetectPowerPcFeatures();
+	if (!g_PowerpcDetectionDone)
+		DetectPowerpcFeatures();
 	return g_hasAES;
 #else
 	return false;
@@ -789,8 +785,8 @@ inline bool HasAES()
 inline bool HasPMULL()
 {
 #if CRYPTOPP_POWER8_VMULL_AVAILABLE
-	if (!g_PowerPcDetectionDone)
-		DetectPowerPcFeatures();
+	if (!g_PowerpcDetectionDone)
+		DetectPowerpcFeatures();
 	return g_hasPMULL;
 #else
 	return false;
@@ -807,8 +803,8 @@ inline bool HasPMULL()
 inline bool HasSHA256()
 {
 #if CRYPTOPP_POWER8_SHA_AVAILABLE
-	if (!g_PowerPcDetectionDone)
-		DetectPowerPcFeatures();
+	if (!g_PowerpcDetectionDone)
+		DetectPowerpcFeatures();
 	return g_hasSHA256;
 #else
 	return false;
@@ -825,8 +821,8 @@ inline bool HasSHA256()
 inline bool HasSHA512()
 {
 #if CRYPTOPP_POWER8_SHA_AVAILABLE
-	if (!g_PowerPcDetectionDone)
-		DetectPowerPcFeatures();
+	if (!g_PowerpcDetectionDone)
+		DetectPowerpcFeatures();
 	return g_hasSHA512;
 #else
 	return false;
@@ -842,8 +838,8 @@ inline bool HasSHA512()
 inline bool HasDARN()
 {
 #if CRYPTOPP_POWER9_AVAILABLE
-	if (!g_PowerPcDetectionDone)
-		DetectPowerPcFeatures();
+	if (!g_PowerpcDetectionDone)
+		DetectPowerpcFeatures();
 	// see comments in cpu.cpp
 #  if defined(__ibmxl__) && defined(__linux__)
 	return false;
@@ -865,8 +861,8 @@ inline bool HasDARN()
 ///  ARM processor equivalent is a privileged instruction, so a compile time value is returned.
 inline int GetCacheLineSize()
 {
-	if (!g_PowerPcDetectionDone)
-		DetectPowerPcFeatures();
+	if (!g_PowerpcDetectionDone)
+		DetectPowerpcFeatures();
 	return g_cacheLineSize;
 }
 

@@ -8,9 +8,9 @@
 //    is needed because additional CXXFLAGS are required to enable
 //    the appropriate instructions sets in some build configurations.
 
-#include "pch.h"
-#include "config.h"
-#include "misc.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
+#include "cryptopp/misc.h"
 
 #if defined(CRYPTOPP_DISABLE_GCM_ASM)
 # undef CRYPTOPP_X86_ASM_AVAILABLE
@@ -35,11 +35,11 @@
 #endif
 
 #if defined(CRYPTOPP_ARM_PMULL_AVAILABLE)
-# include "arm_simd.h"
+# include "cryptopp/arm_simd.h"
 #endif
 
 #if defined(CRYPTOPP_ALTIVEC_AVAILABLE)
-# include "ppc_simd.h"
+# include "cryptopp/ppc_simd.h"
 #endif
 
 #ifdef CRYPTOPP_GNU_STYLE_INLINE_ASSEMBLY
@@ -153,6 +153,59 @@ bool CPU_ProbePMULL()
 #endif  // CRYPTOPP_ARM_PMULL_AVAILABLE
 }
 #endif  // ARM32 or ARM64
+
+#if (CRYPTOPP_BOOL_PPC32 || CRYPTOPP_BOOL_PPC64)
+bool CPU_ProbePMULL()
+{
+#if defined(CRYPTOPP_NO_CPU_FEATURE_PROBES)
+    return false;
+#elif (CRYPTOPP_POWER8_VMULL_AVAILABLE)
+    // longjmp and clobber warnings. Volatile is required.
+    volatile bool result = true;
+
+    volatile SigHandler oldHandler = signal(SIGILL, SigIllHandler);
+    if (oldHandler == SIG_ERR)
+        return false;
+
+    volatile sigset_t oldMask;
+    if (sigprocmask(0, NULLPTR, (sigset_t*)&oldMask))
+    {
+        signal(SIGILL, oldHandler);
+        return false;
+    }
+
+    if (setjmp(s_jmpSIGILL))
+        result = false;
+    else
+    {
+        const uint64_t wa1[]={0,W64LIT(0x9090909090909090)},
+                       wb1[]={0,W64LIT(0xb0b0b0b0b0b0b0b0)};
+        const uint64x2_p a1=VecLoad(wa1), b1=VecLoad(wb1);
+
+        const uint8_t wa2[]={0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,
+                             0xa0,0xa0,0xa0,0xa0,0xa0,0xa0,0xa0,0xa0},
+                      wb2[]={0xc0,0xc0,0xc0,0xc0,0xc0,0xc0,0xc0,0xc0,
+                             0xe0,0xe0,0xe0,0xe0,0xe0,0xe0,0xe0,0xe0};
+        const uint32x4_p a2=VecLoad(wa2), b2=VecLoad(wb2);
+
+        const uint64x2_p r1 = VecIntelMultiply11(a1, b1);
+        const uint64x2_p r2 = VecIntelMultiply11((uint64x2_p)a2, (uint64x2_p)b2);
+
+        const uint64_t wc1[]={W64LIT(0x5300530053005300), W64LIT(0x5300530053005300)},
+                       wc2[]={W64LIT(0x6c006c006c006c00), W64LIT(0x6c006c006c006c00)};
+        const uint64x2_p c1=VecLoad(wc1), c2=VecLoad(wc2);
+
+        result = !!(VecEqual(r1, c1) && VecEqual(r2, c2));
+    }
+
+    sigprocmask(SIG_SETMASK, (sigset_t*)&oldMask, NULLPTR);
+    signal(SIGILL, oldHandler);
+    return result;
+#else
+    return false;
+#endif  // CRYPTOPP_POWER8_VMULL_AVAILABLE
+}
+#endif  // PPC32 or PPC64
 
 // *************************** ARM NEON *************************** //
 

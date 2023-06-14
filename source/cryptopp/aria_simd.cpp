@@ -6,9 +6,9 @@
 //    because additional CXXFLAGS are required to enable the
 //    appropriate instructions sets in some build configurations.
 
-#include "pch.h"
-#include "config.h"
-#include "misc.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
+#include "cryptopp/misc.h"
 
 #if (CRYPTOPP_SSSE3_AVAILABLE)
 # include <tmmintrin.h>

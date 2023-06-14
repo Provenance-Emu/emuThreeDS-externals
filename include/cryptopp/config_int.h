@@ -25,8 +25,8 @@
 #ifndef CRYPTOPP_CONFIG_INT_H
 #define CRYPTOPP_CONFIG_INT_H
 
-#include "config_ns.h"
-#include "config_ver.h"
+#include "cryptopp/config_ns.h"
+#include "cryptopp/config_ver.h"
 
 /// \brief Library byte guard
 /// \details CRYPTOPP_NO_GLOBAL_BYTE indicates <tt>byte</tt> is in the Crypto++

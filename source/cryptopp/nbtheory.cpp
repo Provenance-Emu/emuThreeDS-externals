@@ -1,16 +1,16 @@
 // nbtheory.cpp - originally written and placed in the public domain by Wei Dai
 
-#include "pch.h"
+#include "cryptopp/pch.h"
 
 #ifndef CRYPTOPP_IMPORTS
 
-#include "nbtheory.h"
-#include "integer.h"
-#include "modarith.h"
-#include "algparam.h"
-#include "smartptr.h"
-#include "misc.h"
-#include "stdcpp.h"
+#include "cryptopp/nbtheory.h"
+#include "cryptopp/integer.h"
+#include "cryptopp/modarith.h"
+#include "cryptopp/algparam.h"
+#include "cryptopp/smartptr.h"
+#include "cryptopp/misc.h"
+#include "cryptopp/stdcpp.h"
 
 #ifdef _OPENMP
 # include <omp.h>
@@ -847,7 +847,7 @@ Integer Lucas(const Integer &e, const Integer &pIn, const Integer &n)
 	return m.ConvertOut(v);
 }
 
-// This is Peter Montgomery's unpublished Lucas sequence evaluation algorithm.
+// This is Peter Montgomery's unpublished Lucas sequence evalutation algorithm.
 // The total number of multiplies and squares used is less than the binary
 // algorithm (see above).  Unfortunately I can't get it to run as fast as
 // the binary algorithm because of the extra overhead.

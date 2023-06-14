@@ -30,7 +30,7 @@
 #ifndef CRYPTOPP_CONFIG_DLL_H
 #define CRYPTOPP_CONFIG_DLL_H
 
-#include "config_os.h"
+#include "cryptopp/config_os.h"
 
 #if defined(CRYPTOPP_DOXYGEN_PROCESSING)
 
@@ -104,7 +104,7 @@
 	/// \brief Override for internal linkage
 	/// \details CRYPTOPP_TABLE can be used to override internal linkage
 	///  on tables with the <tt>const</tt> qualifier. According to C++ rules
-	///  a declaration with <tt>const</tt> qualifier is internal linkage.
+	///  a decalration with <tt>const</tt> qualifier is internal linkage.
 	/// \note The name CRYPTOPP_TABLE was chosen because it is often used to
 	///  export a table, like AES or SHA constants. The name avoids collisions
 	///  with the DLL gear macros, like CRYPTOPP_EXPORTS and CRYPTOPP_EXTERN.

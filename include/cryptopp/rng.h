@@ -9,15 +9,15 @@
 #ifndef CRYPTOPP_RNG_H
 #define CRYPTOPP_RNG_H
 
-#include "cryptlib.h"
-#include "filters.h"
-#include "smartptr.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/filters.h"
+#include "cryptopp/smartptr.h"
 
 NAMESPACE_BEGIN(CryptoPP)
 
 /// \brief Linear Congruential Generator (LCG)
 /// \details Originally propsed by William S. England.
-/// \warning LC_RNG is suitable for simulations, where uniformaly distributed numbers are
+/// \warning LC_RNG is suitable for simulations, where uniformaly distrubuted numbers are
 ///  required quickly. It should not be used for cryptographic purposes.
 class LC_RNG : public RandomNumberGenerator
 {

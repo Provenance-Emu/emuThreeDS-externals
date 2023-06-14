@@ -2,8 +2,8 @@
 
 // Thanks to Leonard Janke for the suggestion for AutoSeededRandomPool.
 
-#include "pch.h"
-#include "config.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
 
 #ifndef CRYPTOPP_IMPORTS
 
@@ -18,31 +18,8 @@
 
 #if !defined(NO_OS_DEPENDENCE) && defined(OS_RNG_AVAILABLE)
 
-#include "osrng.h"
-#include "rng.h"
-
-// FreeBSD links /dev/urandom -> /dev/random. It showed up when we added
-// O_NOFOLLOW to harden the non-blocking generator. Use Arc4Random instead
-// for a non-blocking generator. Arc4Random is cryptograhic quality prng
-// based on ChaCha20. The ChaCha20 generator is seeded from /dev/random,
-// so we can't completely avoid the blocking.
-// https://www.freebsd.org/cgi/man.cgi?query=arc4random_buf.
-#ifdef __FreeBSD__
-# define DONT_USE_O_NOFOLLOW 1
-# define USE_FREEBSD_ARC4RANDOM 1
-# include <stdlib.h>
-#endif
-
-// Solaris links /dev/urandom -> ../devices/pseudo/random@0:urandom
-// We can't access the device. Avoid O_NOFOLLOW for the platform.
-#ifdef __sun
-# define DONT_USE_O_NOFOLLOW 1
-#endif
-
-// And other OSes that don't define it
-#ifndef O_NOFOLLOW
-# define DONT_USE_O_NOFOLLOW 1
-#endif
+#include "cryptopp/osrng.h"
+#include "cryptopp/rng.h"
 
 #ifdef CRYPTOPP_WIN32_AVAILABLE
 #define WIN32_LEAN_AND_MEAN
@@ -156,23 +133,19 @@ MicrosoftCryptoProvider::~MicrosoftCryptoProvider()
 
 NonblockingRng::NonblockingRng()
 {
-#if !defined(CRYPTOPP_WIN32_AVAILABLE) && !defined(USE_FREEBSD_ARC4RANDOM)
-# ifndef DONT_USE_O_NOFOLLOW
-	const int flags = O_RDONLY|O_NOFOLLOW;
-# else
-	const int flags = O_RDONLY;
-# endif
-
-	m_fd = open("/dev/urandom", flags);
+#ifndef CRYPTOPP_WIN32_AVAILABLE
+	m_fd = open("/dev/urandom",O_RDONLY);
 	if (m_fd == -1)
 		throw OS_RNG_Err("open /dev/urandom");
 
+	// Do some OSes return -NNN instead of -1?
+	CRYPTOPP_ASSERT(m_fd >= 0);
 #endif
 }
 
 NonblockingRng::~NonblockingRng()
 {
-#if !defined(CRYPTOPP_WIN32_AVAILABLE) && !defined(USE_FREEBSD_ARC4RANDOM)
+#ifndef CRYPTOPP_WIN32_AVAILABLE
 	close(m_fd);
 #endif
 }
@@ -216,12 +189,6 @@ void NonblockingRng::GenerateBlock(byte *output, size_t size)
 	}
 # endif
 #else
-
-# if defined(USE_FREEBSD_ARC4RANDOM)
-	// Cryptographic quality prng based on ChaCha20,
-	// https://www.freebsd.org/cgi/man.cgi?query=arc4random_buf
-	arc4random_buf(output, size);
-# else
 	while (size)
 	{
 		ssize_t len = read(m_fd, output, size);
@@ -233,11 +200,10 @@ void NonblockingRng::GenerateBlock(byte *output, size_t size)
 
 			continue;
 		}
+
 		output += len;
 		size -= len;
 	}
-# endif  // USE_FREEBSD_ARC4RANDOM
-
 #endif  // CRYPTOPP_WIN32_AVAILABLE
 }
 
@@ -248,24 +214,21 @@ void NonblockingRng::GenerateBlock(byte *output, size_t size)
 #ifdef BLOCKING_RNG_AVAILABLE
 
 #ifndef CRYPTOPP_BLOCKING_RNG_FILENAME
-# ifdef __OpenBSD__
-#  define CRYPTOPP_BLOCKING_RNG_FILENAME "/dev/srandom"
-# else
-#  define CRYPTOPP_BLOCKING_RNG_FILENAME "/dev/random"
-# endif
+#ifdef __OpenBSD__
+#define CRYPTOPP_BLOCKING_RNG_FILENAME "/dev/srandom"
+#else
+#define CRYPTOPP_BLOCKING_RNG_FILENAME "/dev/random"
+#endif
 #endif
 
 BlockingRng::BlockingRng()
 {
-#ifndef DONT_USE_O_NOFOLLOW
-	const int flags = O_RDONLY|O_NOFOLLOW;
-#else
-	const int flags = O_RDONLY;
-#endif
-
-	m_fd = open(CRYPTOPP_BLOCKING_RNG_FILENAME, flags);
+	m_fd = open(CRYPTOPP_BLOCKING_RNG_FILENAME,O_RDONLY);
 	if (m_fd == -1)
 		throw OS_RNG_Err("open " CRYPTOPP_BLOCKING_RNG_FILENAME);
+
+	// Do some OSes return -NNN instead of -1?
+	CRYPTOPP_ASSERT(m_fd >= 0);
 }
 
 BlockingRng::~BlockingRng()

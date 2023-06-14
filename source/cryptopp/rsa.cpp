@@ -1,19 +1,19 @@
 // rsa.cpp - originally written and placed in the public domain by Wei Dai
 
-#include "pch.h"
-#include "rsa.h"
-#include "asn.h"
-#include "sha.h"
-#include "oids.h"
-#include "modarith.h"
-#include "nbtheory.h"
-#include "algparam.h"
-#include "fips140.h"
-#include "pkcspad.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/rsa.h"
+#include "cryptopp/asn.h"
+#include "cryptopp/sha.h"
+#include "cryptopp/oids.h"
+#include "cryptopp/modarith.h"
+#include "cryptopp/nbtheory.h"
+#include "cryptopp/algparam.h"
+#include "cryptopp/fips140.h"
+#include "cryptopp/pkcspad.h"
 
 #if defined(CRYPTOPP_DEBUG) && !defined(CRYPTOPP_DOXYGEN_PROCESSING) && !defined(CRYPTOPP_IS_DLL)
-#include "sha3.h"
-#include "pssr.h"
+#include "cryptopp/sha3.h"
+#include "cryptopp/pssr.h"
 NAMESPACE_BEGIN(CryptoPP)
 void RSA_TestInstantiations()
 {
@@ -126,24 +126,19 @@ void InvertibleRSAFunction::GenerateRandom(RandomNumberGenerator &rng, const Nam
 	if (m_e < 3 || m_e.IsEven())
 		throw InvalidArgument("InvertibleRSAFunction: invalid public exponent");
 
-	// Do this in a loop for small moduli. For small moduli, u' == 0 when p == q.
-	// https://github.com/weidai11/cryptopp/issues/1136
-	do
-	{
-		RSAPrimeSelector selector(m_e);
-		AlgorithmParameters primeParam = MakeParametersForTwoPrimesOfEqualSize(modulusSize)
-			(Name::PointerToPrimeSelector(), selector.GetSelectorPointer());
-		m_p.GenerateRandom(rng, primeParam);
-		m_q.GenerateRandom(rng, primeParam);
+	RSAPrimeSelector selector(m_e);
+	AlgorithmParameters primeParam = MakeParametersForTwoPrimesOfEqualSize(modulusSize)
+		(Name::PointerToPrimeSelector(), selector.GetSelectorPointer());
+	m_p.GenerateRandom(rng, primeParam);
+	m_q.GenerateRandom(rng, primeParam);
 
-		m_d = m_e.InverseMod(LCM(m_p-1, m_q-1));
-		CRYPTOPP_ASSERT(m_d.IsPositive());
+	m_d = m_e.InverseMod(LCM(m_p-1, m_q-1));
+	CRYPTOPP_ASSERT(m_d.IsPositive());
 
-		m_dp = m_d % (m_p-1);
-		m_dq = m_d % (m_q-1);
-		m_n = m_p * m_q;
-		m_u = m_q.InverseMod(m_p);
-	} while (m_u.IsZero());
+	m_dp = m_d % (m_p-1);
+	m_dq = m_d % (m_q-1);
+	m_n = m_p * m_q;
+	m_u = m_q.InverseMod(m_p);
 
 	if (FIPS_140_2_ComplianceEnabled())
 	{
@@ -164,7 +159,7 @@ void InvertibleRSAFunction::Initialize(RandomNumberGenerator &rng, unsigned int 
 
 void InvertibleRSAFunction::Initialize(const Integer &n, const Integer &e, const Integer &d)
 {
-	if (n.IsEven() || e.IsEven() || d.IsEven())
+	if (n.IsEven() || e.IsEven() | d.IsEven())
 		throw InvalidArgument("InvertibleRSAFunction: input is not a valid RSA private key");
 
 	m_n = n;

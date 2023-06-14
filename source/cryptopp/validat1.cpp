@@ -2,20 +2,20 @@
 //                Routines in this source file are only tested in Debug builds.
 //                Source files split in July 2018 to expedite compiles.
 
-#include "pch.h"
+#include "cryptopp/pch.h"
 
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
-#include "cryptlib.h"
-#include "cpu.h"
-#include "validate.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/cpu.h"
+#include "cryptopp/validate.h"
 
-#include "secblock.h"
-#include "gzip.h"
-#include "zlib.h"
+#include "cryptopp/secblock.h"
+#include "cryptopp/gzip.h"
+#include "cryptopp/zlib.h"
 
 #if defined(CRYPTOPP_ALTIVEC_AVAILABLE)
-# include "ppc_simd.h"
+# include "cryptopp/ppc_simd.h"
 #endif
 
 #include <iostream>
@@ -1074,7 +1074,7 @@ bool TestAltivecOps()
         return true;
     }
 
-    // These tests may seem superfluous, but we really want to test the
+    // These tests may seem superflous, but we really want to test the
     // Altivec/POWER4 implementation. That does not happen when POWER7
     // or POWER8 is available because we use POWER7's unaligned loads
     // and stores with POWER8's AES, SHA, etc. These tests enage

@@ -7,16 +7,16 @@
 // The updated XorBuffer gains 0.3 to 1.5 cpb on the architectures for
 // 16-byte block sizes.
 
-#include "pch.h"
+#include "cryptopp/pch.h"
 
-#include "xts.h"
-#include "misc.h"
-#include "modes.h"
-#include "cpu.h"
+#include "cryptopp/xts.h"
+#include "cryptopp/misc.h"
+#include "cryptopp/modes.h"
+#include "cryptopp/cpu.h"
 
 #if defined(CRYPTOPP_DEBUG)
-# include "aes.h"
-# include "threefish.h"
+# include "cryptopp/aes.h"
+# include "cryptopp/threefish.h"
 #endif
 
 // 0.3 to 0.4 cpb profit
@@ -25,13 +25,13 @@
 #endif
 
 #if defined(__aarch32__) || defined(__aarch64__) || defined(_M_ARM64)
-# if (CRYPTOPP_ARM_NEON_HEADER) || (CRYPTOPP_ARM_ASIMD_AVAILABLE)
+# if (CRYPTOPP_ARM_NEON_HEADER)
 #  include <arm_neon.h>
 # endif
 #endif
 
 #if defined(__ALTIVEC__)
-# include "ppc_simd.h"
+# include "cryptopp/ppc_simd.h"
 #endif
 
 ANONYMOUS_NAMESPACE_BEGIN
@@ -93,16 +93,7 @@ inline void XorBuffer(byte *buf, const byte *mask, size_t count)
 // Borrowed from CMAC, but little-endian representation
 inline void GF_Double(byte *out, const byte* in, unsigned int len)
 {
-#if defined(CRYPTOPP_WORD128_AVAILABLE)
-    word128 carry = 0, x;
-    for (size_t i=0, idx=0; i<len/16; ++i, idx+=16)
-    {
-        x = GetWord<word128>(false, LITTLE_ENDIAN_ORDER, in+idx);
-        word128 y = (x >> 127); x = (x << 1) + carry;
-        PutWord<word128>(false, LITTLE_ENDIAN_ORDER, out+idx, x);
-        carry = y;
-    }
-#elif defined(_M_X64) || defined(_M_ARM64) || defined(_LP64) || defined(__LP64__)
+#if defined(_M_X64) || defined(_M_ARM64) || defined(_LP64) || defined(__LP64__)
     word64 carry = 0, x;
     for (size_t i=0, idx=0; i<len/8; ++i, idx+=8)
     {

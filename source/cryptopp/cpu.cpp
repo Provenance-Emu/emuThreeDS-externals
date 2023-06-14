@@ -1,8 +1,8 @@
 // cpu.cpp - originally written and placed in the public domain by Wei Dai
 //           modified by Jeffrey Walton and the community over the years.
 
-#include "pch.h"
-#include "config.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
 
 #ifndef EXCEPTION_EXECUTE_HANDLER
 # define EXCEPTION_EXECUTE_HANDLER 1
@@ -10,9 +10,9 @@
 
 #ifndef CRYPTOPP_IMPORTS
 
-#include "cpu.h"
-#include "misc.h"
-#include "stdcpp.h"
+#include "cryptopp/cpu.h"
+#include "cryptopp/misc.h"
+#include "cryptopp/stdcpp.h"
 
 // For _xgetbv on Microsoft 32-bit and 64-bit Intel platforms
 // https://github.com/weidai11/cryptopp/issues/972
@@ -70,7 +70,7 @@ unsigned long int getauxval(unsigned long int) { return 0; }
 // setenv-android.sh will copy the header and source file
 // into PWD and the makefile will build it in place.
 #if defined(__ANDROID__)
-# include "cpu-features.h"
+# include "cryptopp/cpu-features.h"
 #endif
 
 #ifdef CRYPTOPP_GNU_STYLE_INLINE_ASSEMBLY
@@ -1130,8 +1130,6 @@ inline bool CPU_QuerySM4()
 
 void DetectArmFeatures()
 {
-#ifndef CRYPTOPP_DISABLE_ASM
-
 	// The CPU_ProbeXXX's return false for OSes which
 	// can't tolerate SIGILL-based probes
 	g_hasARMv7 = CPU_QueryARMv7() || CPU_ProbeARMv7();
@@ -1157,8 +1155,6 @@ void DetectArmFeatures()
 	if (g_cacheLineSize == 0)
 		g_cacheLineSize = CRYPTOPP_L1_CACHE_LINE_SIZE;
 
-#endif  // CRYPTOPP_DISABLE_ASM
-
 	*const_cast<volatile bool*>(&g_ArmDetectionDone) = true;
 }
 
@@ -1166,7 +1162,7 @@ void DetectArmFeatures()
 
 #elif (CRYPTOPP_BOOL_PPC32 || CRYPTOPP_BOOL_PPC64)
 
-bool CRYPTOPP_SECTION_INIT g_PowerPcDetectionDone = false;
+bool CRYPTOPP_SECTION_INIT g_PowerpcDetectionDone = false;
 bool CRYPTOPP_SECTION_INIT g_hasAltivec = false;
 bool CRYPTOPP_SECTION_INIT g_hasPower7 = false;
 bool CRYPTOPP_SECTION_INIT g_hasPower8 = false;
@@ -1377,15 +1373,14 @@ inline bool CPU_QueryDARN()
 	return false;
 }
 
-void DetectPowerPcFeatures()
+void DetectPowerpcFeatures()
 {
-	// GCC 10 is giving us trouble in CPU_ProbePower9() and CPU_ProbeDARN().
-	// GCC is generating POWER9 instructions on POWER8 for ppc_power9.cpp.
-	// The compiler idiots did not think through the consequences of
-	// requiring us to use -mcpu=power9 to unlock the ISA. Epic fail.
+	// GCC 10 is giving us trouble in CPU_ProbePower9() and
+	// CPU_ProbeDARN(). GCC is generating POWER9 instructions
+	// on POWER8 for ppc_power9.cpp. The compiler idiots did
+	// not think through the consequences of requiring us to
+	// use -mcpu=power9 to unlock the ISA. Epic fail.
 	// https://github.com/weidai11/cryptopp/issues/986
-
-#ifndef CRYPTOPP_DISABLE_ASM
 
 	// The CPU_ProbeXXX's return false for OSes which
 	// can't tolerate SIGILL-based probes, like Apple
@@ -1415,9 +1410,7 @@ void DetectPowerPcFeatures()
 	if (g_cacheLineSize == 0)
 		g_cacheLineSize = CRYPTOPP_L1_CACHE_LINE_SIZE;
 
-#endif // CRYPTOPP_DISABLE_ASM
-
-	*const_cast<volatile bool*>(&g_PowerPcDetectionDone) = true;
+	*const_cast<volatile bool*>(&g_PowerpcDetectionDone) = true;
 }
 
 #endif
@@ -1437,7 +1430,7 @@ public:
 #elif CRYPTOPP_BOOL_ARM32 || CRYPTOPP_BOOL_ARMV8
 		CryptoPP::DetectArmFeatures();
 #elif CRYPTOPP_BOOL_PPC32 || CRYPTOPP_BOOL_PPC64
-		CryptoPP::DetectPowerPcFeatures();
+		CryptoPP::DetectPowerpcFeatures();
 #endif
 	}
 };

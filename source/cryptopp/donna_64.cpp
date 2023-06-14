@@ -18,14 +18,14 @@
 // If needed, see Moon's commit "Go back to ignoring 256th bit [sic]",
 // https://github.com/floodyberry/curve25519-donna/commit/57a683d18721a658
 
-#include "pch.h"
+#include "cryptopp/pch.h"
 
-#include "config.h"
-#include "donna.h"
-#include "secblock.h"
-#include "sha.h"
-#include "misc.h"
-#include "cpu.h"
+#include "cryptopp/config.h"
+#include "cryptopp/donna.h"
+#include "cryptopp/secblock.h"
+#include "cryptopp/sha.h"
+#include "cryptopp/misc.h"
+#include "cryptopp/cpu.h"
 
 #include <istream>
 #include <sstream>
@@ -55,7 +55,7 @@ ANONYMOUS_NAMESPACE_END
 
 #if defined(CRYPTOPP_CURVE25519_64BIT)
 
-#include "donna_64.h"
+#include "cryptopp/donna_64.h"
 
 ANONYMOUS_NAMESPACE_BEGIN
 
@@ -1650,7 +1650,7 @@ ed25519_sign_CXX(std::istream& stream, const byte sk[32], const byte pk[32], byt
     ALIGN(ALIGN_SPEC) ge25519 R;
     hash_512bits extsk, hashr, hram;
 
-    // Unfortunately we need to read the stream twice. The first time calculates
+    // Unfortunately we need to read the stream twice. The fisrt time calculates
     // 'r = H(aExt[32..64], m)'. The second time calculates 'S = H(R,A,m)'. There
     // is a data dependency due to hashing 'RS' with 'R = [r]B' that does not
     // allow us to read the stream once.

@@ -1,17 +1,17 @@
 // default.cpp - originally written and placed in the public domain by Wei Dai
 
-#include "pch.h"
-#include "config.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
 
 #if CRYPTOPP_MSC_VERSION
 # pragma warning(disable: 4127 4189)
 #endif
 
-#include "cryptlib.h"
-#include "filters.h"
-#include "smartptr.h"
-#include "default.h"
-#include "queue.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/filters.h"
+#include "cryptopp/smartptr.h"
+#include "cryptopp/default.h"
+#include "cryptopp/queue.h"
 
 #include <time.h>
 #include <memory>
@@ -19,7 +19,7 @@
 NAMESPACE_BEGIN(CryptoPP)
 
 // The purpose of this function Mash() is to take an arbitrary length input
-// string and *deterministically* produce an arbitrary length output string such
+// string and *deterministicly* produce an arbitrary length output string such
 // that (1) it looks random, (2) no information about the input is
 // deducible from it, and (3) it contains as much entropy as it can hold, or
 // the amount of entropy in the input string, whichever is smaller.
@@ -28,7 +28,7 @@ template <class H>
 static void Mash(const byte *in, size_t inLen, byte *out, size_t outLen, int iterations)
 {
 	if (BytePrecision(outLen) > 2)
-		throw InvalidArgument("Mash: output length too large");
+		throw InvalidArgument("Mash: output legnth too large");
 
 	size_t bufSize = RoundUpToMultipleOf(outLen, (size_t)H::DIGESTSIZE);
 	byte b[2];

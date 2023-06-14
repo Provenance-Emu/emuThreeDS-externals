@@ -6,7 +6,7 @@
 #ifndef CRYPTOPP_ARM_SIMD_H
 #define CRYPTOPP_ARM_SIMD_H
 
-#include "config.h"
+#include "cryptopp/config.h"
 
 #if (CRYPTOPP_ARM_NEON_HEADER)
 # include <stdint.h>
@@ -351,9 +351,9 @@ inline uint64x2_t VEXT_U8(uint64x2_t a, uint64x2_t b)
             :"=w" (r) : "w" (a), "w" (b), "I" (C) );
     return r;
 #endif
+//@}
 }
 
-//@}
 #endif // CRYPTOPP_ARM_PMULL_AVAILABLE
 
 #if CRYPTOPP_ARM_SHA3_AVAILABLE  || defined(CRYPTOPP_DOXYGEN_PROCESSING)
@@ -385,19 +385,19 @@ inline uint64x2_t VEOR3(uint64x2_t a, uint64x2_t b, uint64x2_t c)
 /// \param a the first value
 /// \param b the second value
 /// \param c the third value
-/// \return two-way exclusive OR of the values, then rotated by c
+/// \return two-way exclusive OR of the values, then rotated by imm6
 /// \details VXARQ() performs vxarq_u64(). VXARQ is provided as GCC inline assembly due
 ///  to Clang and lack of support for the intrinsic.
 /// \details VXARQ requires ARMv8.2.
 /// \since Crypto++ 8.6
-inline uint64x2_t VXAR(uint64x2_t a, uint64x2_t b, const int c)
+inline uint64x2_t VXAR(uint64x2_t a, uint64x2_t b, const int imm6)
 {
 #if defined(_MSC_VER)
-    return vxarq_u64(a, b, c);
+    return vxarq_u64(a, b, imm6);
 #else
     uint64x2_t r;
     __asm__ ("xar   %0.2d, %1.2d, %2.2d, %3   \n\t"
-            :"=w" (r) : "w" (a), "w" (b), "I" (c));
+            :"=w" (r) : "w" (a), "w" (b), "I" (imm6));
     return r;
 #endif
 }

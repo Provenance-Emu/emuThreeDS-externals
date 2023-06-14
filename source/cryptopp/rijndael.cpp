@@ -78,19 +78,20 @@ being unloaded from L1 cache, until that round is finished.
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "pch.h"
-#include "config.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
 
 #ifndef CRYPTOPP_IMPORTS
 #ifndef CRYPTOPP_GENERATE_X64_MASM
 
-#include "rijndael.h"
-#include "misc.h"
-#include "cpu.h"
+#include "cryptopp/rijndael.h"
+#include "cryptopp/misc.h"
+#include "cryptopp/cpu.h"
 
-// VS2017 and global optimization bug. Also see
+// VS2017 and global optimization bug. TODO, figure out when
+// we can re-enable full optimizations for VS2017. Also see
 // https://github.com/weidai11/cryptopp/issues/649
-#if (_MSC_VER >= 1910) && (_MSC_VER < 1916)
+#if (_MSC_VER >= 1910)
 # ifndef CRYPTOPP_DEBUG
 #  pragma optimize("", off)
 #  pragma optimize("ts", on)
@@ -135,7 +136,7 @@ ANONYMOUS_NAMESPACE_BEGIN
 //   with the same 4k block offsets as the Te table. Logically,
 //   the code is trying to create the condition:
 //
-// Two separate memory pages:
+// Two sepearate memory pages:
 //
 //  +-----+   +-----+
 //  |XXXXX|   |YYYYY|

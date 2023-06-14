@@ -6,11 +6,11 @@
 #ifndef CRYPTOPP_GF2N_H
 #define CRYPTOPP_GF2N_H
 
-#include "cryptlib.h"
-#include "secblock.h"
-#include "algebra.h"
-#include "misc.h"
-#include "asn.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/secblock.h"
+#include "cryptopp/algebra.h"
+#include "cryptopp/misc.h"
+#include "cryptopp/asn.h"
 
 #include <iosfwd>
 
@@ -28,7 +28,7 @@ class CRYPTOPP_DLL PolynomialMod2
 public:
 	/// \name ENUMS, EXCEPTIONS, and TYPEDEFS
 	//@{
-		/// \brief Exception thrown when divide by zero is encountered
+		/// \brief Excpetion thrown when divide by zero is encountered
 		class DivideByZero : public Exception
 		{
 		public:

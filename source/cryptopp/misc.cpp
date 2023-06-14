@@ -1,7 +1,7 @@
 // misc.cpp - originally written and placed in the public domain by Wei Dai
 
-#include "pch.h"
-#include "config.h"
+#include "cryptopp/pch.h"
+#include "cryptopp/config.h"
 
 #if CRYPTOPP_MSC_VERSION
 # pragma warning(disable: 4189)
@@ -12,12 +12,12 @@
 
 #ifndef CRYPTOPP_IMPORTS
 
-#include "misc.h"
-#include "trap.h"
-#include "words.h"
-#include "stdcpp.h"
-#include "integer.h"
-#include "secblock.h"
+#include "cryptopp/misc.h"
+#include "cryptopp/trap.h"
+#include "cryptopp/words.h"
+#include "cryptopp/stdcpp.h"
+#include "cryptopp/integer.h"
+#include "cryptopp/secblock.h"
 
 // Hack for OpenBSD and GCC 4.2.1. I believe they are stuck at 4.2.1 due to GPLv3.
 #if defined(__OpenBSD__)
@@ -35,8 +35,8 @@
 #  include <immintrin.h>
 # endif
 
-# if defined(__aarch32__) || defined(__aarch64__) || defined(_M_ARM64)
-#  if (CRYPTOPP_ARM_NEON_HEADER) || (CRYPTOPP_ARM_ASIMD_AVAILABLE)
+# if defined(__aarch64__) || defined(__aarch32__) || defined(_M_ARM64)
+#  if defined(CRYPTOPP_ARM_NEON_HEADER)
 #   include <arm_neon.h>
 #  endif
 # endif
@@ -254,7 +254,7 @@ bool VerifyBufsEqual(const byte *buf, const byte *mask, size_t count)
 	for (size_t i=0; i<count; i++)
 		acc8 |= buf[i] ^ mask[i];
 
-	// word32 results in this tail code on x86:
+	// word32 resuts in this tail code on x86:
 	//   33a:  85 c0     test  %eax, %eax
 	//   33c:  0f 94 c0  sete  %al
 	//   33f:  c3        ret

@@ -86,6 +86,8 @@ struct SourceRegister {
             return value - 0x10;
         else if (GetRegisterType() == RegisterType::FloatUniform)
             return value - 0x20;
+        else
+            return 0x0;
     }
 
     static const SourceRegister FromTypeAndIndex(RegisterType type, int index) {
