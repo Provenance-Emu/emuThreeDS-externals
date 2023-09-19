@@ -30,6 +30,7 @@
 // #define BOOST_SPIRIT_DEBUG
 
 #include <boost/fusion/include/adapt_struct.hpp>
+#include <boost/phoenix/core/reference.hpp>
 #include <boost/spirit/include/qi.hpp>
 
 #include "nihstro/parser_assembly.h"
@@ -102,5 +103,5 @@ CompareParser<ParserIterator>::CompareParser(const ParserContext& context)
         BOOST_SPIRIT_DEBUG_NODE(instr[0]);
         BOOST_SPIRIT_DEBUG_NODE(instruction);
 
-        qi::on_error<qi::fail>(instruction, error_handler(boost::ref(diagnostics), _1, _2, _3, _4));
+        qi::on_error<qi::fail>(instruction, error_handler(phoenix::ref(diagnostics), _1, _2, _3, _4));
 }

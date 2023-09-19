@@ -97,7 +97,7 @@ struct ErrorHandler
     {
         const spirit::utf8_string& tag(info.tag);
         const char* const what(tag.c_str());
-        const char* diagnostic = nullptr; //diagnostic(diagnostics[what]);
+        const char* diagnostic(diagnostics[what]);
         std::string scratch;
         if (!diagnostic) {
             scratch.reserve(25 + tag.length());

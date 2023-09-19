@@ -30,6 +30,7 @@
 // #define BOOST_SPIRIT_DEBUG
 
 #include <boost/fusion/include/adapt_struct.hpp>
+#include <boost/phoenix/core/reference.hpp>
 #include <boost/spirit/include/qi.hpp>
 
 #include "nihstro/parser_assembly.h"
@@ -93,7 +94,7 @@ TrivialOpParser<Iterator, require_end_of_line>::TrivialOpParser(const ParserCont
         BOOST_SPIRIT_DEBUG_NODE(opcode);
         BOOST_SPIRIT_DEBUG_NODE(trivial_instruction);
 
-        qi::on_error<qi::fail>(trivial_instruction, error_handler(boost::ref(diagnostics), _1, _2, _3, _4));
+        qi::on_error<qi::fail>(trivial_instruction, error_handler(phoenix::ref(diagnostics), _1, _2, _3, _4));
 }
 
 template<typename Iterator>
@@ -125,7 +126,7 @@ SetEmitParser<Iterator>::SetEmitParser(const ParserContext& context)
         BOOST_SPIRIT_DEBUG_NODE(flags);
         BOOST_SPIRIT_DEBUG_NODE(setemit_instruction);
 
-        qi::on_error<qi::fail>(setemit_instruction, error_handler(boost::ref(diagnostics), _1, _2, _3, _4));
+        qi::on_error<qi::fail>(setemit_instruction, error_handler(phoenix::ref(diagnostics), _1, _2, _3, _4));
 }
 
 template<typename Iterator>
@@ -139,7 +140,7 @@ LabelParser<Iterator>::LabelParser(const ParserContext& context)
 
         BOOST_SPIRIT_DEBUG_NODE(label);
 
-        qi::on_error<qi::fail>(label, error_handler(boost::ref(diagnostics), _1, _2, _3, _4));
+        qi::on_error<qi::fail>(label, error_handler(phoenix::ref(diagnostics), _1, _2, _3, _4));
 }
 template struct LabelParser<ParserIterator>;
 

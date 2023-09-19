@@ -30,6 +30,7 @@
 // #define BOOST_SPIRIT_DEBUG
 
 #include <boost/fusion/include/adapt_struct.hpp>
+#include <boost/phoenix/core/reference.hpp>
 #include <boost/spirit/include/qi.hpp>
 
 #include "nihstro/parser_assembly.h"
@@ -112,5 +113,5 @@ FloatOpParser<ParserIterator>::FloatOpParser(const ParserContext& context)
         diagnostics.Add(expression_chain[2].name(), "three arguments");
         diagnostics.Add(expression_chain[3].name(), "four arguments");
 
-        qi::on_error<qi::fail>(float_instruction, error_handler(boost::ref(diagnostics), _1, _2, _3, _4));
+        qi::on_error<qi::fail>(float_instruction, error_handler(phoenix::ref(diagnostics), _1, _2, _3, _4));
 }

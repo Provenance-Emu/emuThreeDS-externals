@@ -27,6 +27,7 @@
 
 
 #include <boost/fusion/include/adapt_struct.hpp>
+#include <boost/phoenix/core/reference.hpp>
 #include <boost/spirit/include/qi.hpp>
 
 #include "nihstro/parser_assembly.h"
@@ -128,5 +129,5 @@ DeclarationParser<ParserIterator>::DeclarationParser(const ParserContext& contex
         BOOST_SPIRIT_DEBUG_NODE(const_or_semantic);
         BOOST_SPIRIT_DEBUG_NODE(declaration);
 
-        qi::on_error<qi::fail>(declaration, error_handler(boost::ref(diagnostics), _1, _2, _3, _4));
+        qi::on_error<qi::fail>(declaration, error_handler(phoenix::ref(diagnostics), _1, _2, _3, _4));
 }

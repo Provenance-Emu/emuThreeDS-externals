@@ -25,7 +25,7 @@ freely, subject to the following restrictions:
 
 // clang++ -fsanitize=fuzzer lodepng.cpp lodepng_fuzzer.cpp -O3 && ./a.out
 
-#include <lodepng/lodepng.h>
+#include "lodepng/lodepng.h"
 
 #include <cstdint>
 
